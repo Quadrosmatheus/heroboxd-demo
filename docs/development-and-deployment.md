@@ -54,6 +54,9 @@ Se a porta `4175` estiver ocupada, altere `PORT` no `.env`; o inicializador segu
 | `DB_PASSWORD` | Senha do banco | Defina localmente; nunca versione |
 | `DB_NAME` | Banco da aplicação | `heroboxd` |
 | `SESSION_DAYS` | Duração máxima da sessão | `30` |
+| `PUBLIC_BASE_URL` | URL base para gerar links de redefinição | `http://127.0.0.1:4175` |
+| `RESEND_API_KEY` | Chave secreta Resend para e-mails transacionais | Configure no painel de segredos |
+| `MAIL_FROM` | Remetente verificado no Resend | `HeroBoxd <contato@seudominio.com>` |
 
 `.env.example` contém valores de demonstração. `.env` e outros arquivos `.env*` são ignorados pelo Git.
 
@@ -66,6 +69,8 @@ source backend/migrations/001_add_user_age.sql
 ```
 
 A migração preserva contas antigas; idade fica `NULL` para quem já estava cadastrado.
+
+Para habilitar redefinição de senha em um banco existente, execute também `backend/migrations/002_add_password_reset_tokens.sql` uma vez.
 
 ## Publicar a aplicação
 
@@ -81,11 +86,12 @@ Em produção o Express escuta na interface do host e marca cookies de sessão c
 
 ### Antes de abrir o cadastro ao público
 
-- Configure um serviço de envio para concluir redefinição de senha verificada por e-mail. `npm run reset:local-password` serve apenas ao banco local.
+- Configure uma chave Resend, remetente verificado e `PUBLIC_BASE_URL` HTTPS para enviar links de redefinição. Em bancos existentes, aplique a migração 002. `npm run reset:local-password` serve apenas ao banco local.
 - O servidor já limita login (8 tentativas por 15 min) e cadastro (5 por hora) por endereço, em memória. Em múltiplas instâncias, use limites compartilhados no proxy ou armazenamento compartilhado.
 - A política inicial está em `frontend/public/privacidade.html`. Informe o contato do operador e confirme retenção, backups e processos reais antes de abrir o cadastro.
 - O usuário pode solicitar exclusão da conta; isso remove em cascata avaliações, listas e sessões. Backups antigos seguem o ciclo de retenção do operador.
 - A licença MIT cobre somente o código original. Verifique os direitos das imagens, marcas e personagens de terceiros antes de uso público.
+- As miniaturas do catálogo filtram para imagens marcadas como livres pela Wikimedia; isso não dispensa verificar licença e atribuição do arquivo individual antes de republicar.
 - `npm test` e `npm run check` rodam localmente e no GitHub Actions. O workflow não publica automaticamente o site.
 
 ## Enviar o código ao GitHub

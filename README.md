@@ -17,6 +17,7 @@ HeroBoxd é um projeto de portfólio que reúne filmes, séries, jogos e quadrin
 - Alternar o tema visual e usar a interface responsiva em celular ou desktop.
 - Criar uma conta com nome, e-mail e idade. A sessão começa após o cadastro.
 - Solicitar a exclusão da conta, avaliações e listas associadas.
+- Recuperar o acesso com um link enviado ao e-mail cadastrado (após configurar o provedor).
 
 ## Como foi construído
 
@@ -26,6 +27,7 @@ HeroBoxd é um projeto de portfólio que reúne filmes, séries, jogos e quadrin
 | API | Node.js 20+ e Express 5 com rotas para catálogo, contas, avaliações e listas |
 | Persistência | MySQL 8 com consultas parametrizadas e chaves estrangeiras |
 | Autenticação | Senha derivada com `scrypt`; sessão aleatória armazenada como hash e cookie HttpOnly |
+| Recuperação de acesso | Token aleatório de uso único, armazenado como hash e enviado via Resend |
 | Catálogo | 80 registros editoriais sincronizados pelo comando `npm run seed` |
 
 ```mermaid
@@ -80,8 +82,8 @@ Leia a [política de privacidade](frontend/public/privacidade.html). Antes de re
 - O servidor e o fluxo de cadastro, avaliação e leitura pública foram verificados localmente.
 - Não há bundler: o Express serve diretamente os arquivos React e CSS. `npm test` executa os testes automatizados e `npm run check` verifica a sintaxe; ambos também rodam no GitHub Actions.
 - Login e cadastro têm limite básico de tentativas em memória por processo. Em produção com múltiplas instâncias, configure limite compartilhado no proxy ou substitua-o por armazenamento compartilhado.
-- A recuperação de senha por e-mail ainda depende da configuração de um provedor de envio e de um fluxo verificado.
-- As imagens são obtidas de fontes externas e podem ter direitos reservados. Confira as licenças antes de reutilizá-las fora da demonstração.
+- A recuperação de senha por e-mail está implementada; configure `RESEND_API_KEY`, um `MAIL_FROM` verificado e `PUBLIC_BASE_URL` para enviar mensagens.
+- As miniaturas automáticas agora pedem imagens marcadas como livres pela Wikimedia. A licença pode variar por arquivo; verifique atribuição e termos antes de republicar imagens ou marcas.
 
 ## Estrutura do repositório
 
@@ -101,6 +103,8 @@ docs/                arquitetura e instruções de execução/publicação
 ## Recuperar uma conta local
 
 Se o e-mail já estiver cadastrado, use **Entrar**. Caso a senha não seja aceita nesta instalação local, rode `npm run reset:local-password` no terminal da raiz. A ferramenta pede uma nova senha sem exibi-la e invalida sessões antigas. Ela recusa conexões MySQL remotas; recuperação em produção precisa ser feita por um fluxo verificado por e-mail.
+
+Para habilitar “Esqueci minha senha” em um site publicado, configure `RESEND_API_KEY`, `MAIL_FROM` com remetente validado e `PUBLIC_BASE_URL` com o endereço HTTPS público. Execute a migração `backend/migrations/002_add_password_reset_tokens.sql` nos bancos existentes. Os links expiram em uma hora e funcionam uma única vez; redefinir a senha encerra as sessões ativas.
 
 ## Licença
 

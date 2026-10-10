@@ -1,0 +1,1 @@
+.danger-button{border:0;border-radius:999px;background:#8e2429;color:#fff;padding:13px 18px;font:inherit;font-weight:700;cursor:pointer}.danger-button:hover{background:#b53138}.danger-button:disabled{opacity:.65;cursor:wait}.confirm-delete{display:flex;align-items:center;gap:10px}.confirm-delete input{width:18px;height:18px;accent-color:#b53138}
