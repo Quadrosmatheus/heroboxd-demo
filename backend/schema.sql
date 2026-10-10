@@ -1,0 +1,68 @@
+﻿CREATE DATABASE IF NOT EXISTS heroboxd CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+USE heroboxd;
+CREATE TABLE IF NOT EXISTS users (
+ id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+ username VARCHAR(64) NOT NULL UNIQUE,
+ email VARCHAR(254) NOT NULL UNIQUE,
+ age TINYINT UNSIGNED,
+ password_hash VARBINARY(128) NOT NULL,
+ password_salt VARBINARY(32) NOT NULL,
+ created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
+CREATE TABLE IF NOT EXISTS media_types (
+ id TINYINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+ name VARCHAR(20) NOT NULL UNIQUE
+) ENGINE=InnoDB;
+CREATE TABLE IF NOT EXISTS publishers (
+ id TINYINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+ name VARCHAR(40) NOT NULL UNIQUE
+) ENGINE=InnoDB;
+CREATE TABLE IF NOT EXISTS media (
+ id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+ title VARCHAR(180) NOT NULL,
+ original_title VARCHAR(180),
+ description TEXT,
+ release_year SMALLINT UNSIGNED,
+ poster_url VARCHAR(1000),
+ is_active TINYINT(1) NOT NULL DEFAULT 1,
+ publisher_id TINYINT UNSIGNED NOT NULL,
+ type_id TINYINT UNSIGNED NOT NULL,
+ created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ CONSTRAINT fk_media_publisher FOREIGN KEY (publisher_id) REFERENCES publishers(id),
+ CONSTRAINT fk_media_type FOREIGN KEY (type_id) REFERENCES media_types(id),
+ INDEX idx_media_browse(type_id,publisher_id,release_year),
+ FULLTEXT INDEX ft_media_search(title, original_title, description)
+) ENGINE=InnoDB;
+CREATE TABLE IF NOT EXISTS reviews (
+ id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+ user_id BIGINT UNSIGNED NOT NULL,
+ media_id BIGINT UNSIGNED NOT NULL,
+ rating TINYINT UNSIGNED NOT NULL,
+ review_text TEXT,
+ created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+ CONSTRAINT chk_review_rating CHECK (rating BETWEEN 1 AND 5),
+ CONSTRAINT fk_reviews_user FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE,
+ CONSTRAINT fk_reviews_media FOREIGN KEY(media_id) REFERENCES media(id) ON DELETE CASCADE,
+ UNIQUE KEY uq_review_user_media(user_id,media_id),
+ INDEX idx_reviews_media(media_id,created_at)
+) ENGINE=InnoDB;
+CREATE TABLE IF NOT EXISTS user_lists (
+ id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+ user_id BIGINT UNSIGNED NOT NULL,
+ media_id BIGINT UNSIGNED NOT NULL,
+ status ENUM('watchlist','watched','favorite') NOT NULL,
+ created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ CONSTRAINT fk_lists_user FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE,
+ CONSTRAINT fk_lists_media FOREIGN KEY(media_id) REFERENCES media(id) ON DELETE CASCADE,
+ UNIQUE KEY uq_list_user_media_status(user_id,media_id,status),
+ INDEX idx_lists_user_status(user_id,status)
+) ENGINE=InnoDB;
+CREATE TABLE IF NOT EXISTS sessions (
+ token_hash BINARY(32) PRIMARY KEY,
+ user_id BIGINT UNSIGNED NOT NULL,
+ expires_at DATETIME NOT NULL,
+ created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ CONSTRAINT fk_sessions_user FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE,
+ INDEX idx_sessions_expiry(expires_at)
+) ENGINE=InnoDB;

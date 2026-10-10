@@ -1,0 +1,14 @@
+﻿# Runtime instalado localmente no projeto, não versionar dados nem binários.
+node_modules/
+data/
+tools/
+.tmp/
+.npm-cache/
+.env
+npm-debug.log*
+.DS_Store
+
+# Arquivos de configuração e segredos locais
+.env*
+!.env.example
+*.log

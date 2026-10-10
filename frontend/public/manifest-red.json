@@ -1,0 +1,12 @@
+{
+  "name": "HeroBoxd",
+  "short_name": "HeroBoxd",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0b0b0d",
+  "theme_color": "#e50914",
+  "description": "Seu diário de histórias de heróis.",
+  "icons": [
+    { "src": "/brand.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
