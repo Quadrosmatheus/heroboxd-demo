@@ -24,7 +24,7 @@ HeroBoxd é um projeto de portfólio que reúne filmes, séries, jogos e quadrin
 | Camada | Implementação |
 | --- | --- |
 | Interface | React 18 servido diretamente pelo Express, CSS responsivo e PWA básica |
-| API | Node.js 20+ e Express 5 com rotas para catálogo, contas, avaliações e listas |
+| API | Node.js 24 LTS e Express 5 com rotas para catálogo, contas, avaliações e listas |
 | Persistência | MySQL 8 com consultas parametrizadas e chaves estrangeiras |
 | Autenticação | Senha derivada com `scrypt`; sessão aleatória armazenada como hash e cookie HttpOnly |
 | Recuperação de acesso | Token aleatório de uso único, armazenado como hash e enviado via Resend |
@@ -43,7 +43,7 @@ Veja os componentes, rotas e relações de dados em [docs/architecture.md](docs/
 
 ## Executar localmente
 
-Requisitos: Node.js 20+ e MySQL 8.4+. Na raiz do repositório:
+Requisitos: Node.js 24 LTS e MySQL 8.4+. Na raiz do repositório:
 
 ```powershell
 npm ci
@@ -83,6 +83,7 @@ Leia a [política de privacidade](frontend/public/privacidade.html). Antes de re
 - Não há bundler: o Express serve diretamente os arquivos React e CSS. `npm test` executa os testes automatizados e `npm run check` verifica a sintaxe; ambos também rodam no GitHub Actions.
 - Login e cadastro têm limite básico de tentativas em memória por processo. Em produção com múltiplas instâncias, configure limite compartilhado no proxy ou substitua-o por armazenamento compartilhado.
 - A recuperação de senha por e-mail está implementada; configure `RESEND_API_KEY`, um `MAIL_FROM` verificado e `PUBLIC_BASE_URL` para enviar mensagens.
+- Uma imagem Docker de produção está disponível para hosts de contêiner.
 - As miniaturas automáticas agora pedem imagens marcadas como livres pela Wikimedia. A licença pode variar por arquivo; verifique atribuição e termos antes de republicar imagens ou marcas.
 
 ## Estrutura do repositório

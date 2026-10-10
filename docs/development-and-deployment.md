@@ -2,7 +2,7 @@
 
 ## Requisitos
 
-- Node.js 20 ou superior.
+- Node.js 24 LTS.
 - MySQL 8.4 ou superior.
 - PowerShell para o atalho local de Windows; em outros sistemas, use um serviço MySQL instalado.
 
@@ -76,13 +76,17 @@ Para habilitar redefinição de senha em um banco existente, execute também `ba
 
 O repositório contém a aplicação, mas não inclui hospedagem, credenciais nem um banco remoto. Para compartilhar avaliações entre visitantes:
 
-1. Escolha um host que execute Node.js 20+ e um serviço MySQL 8.4+ persistente.
+1. Escolha um host que execute Node.js 24 LTS (ou aceite a imagem Docker incluída) e um serviço MySQL 8.4+ persistente.
 2. Configure as variáveis acima no painel de segredos do host. Use uma conta MySQL dedicada, acesso limitado e senha forte.
 3. Importe `backend/schema.sql` no banco de produção e execute `npm run seed` uma vez para criar o catálogo inicial.
 4. Defina `NODE_ENV=production`, `PORT` fornecida pelo host e termine TLS em um proxy HTTPS confiável.
 5. Configure backup/restauração do banco, logs e monitoramento. Não exponha a porta MySQL à internet.
 
 Em produção o Express escuta na interface do host e marca cookies de sessão como `Secure`. O banco local não deve ser copiado para produção nem compartilhado com GitHub.
+
+### Imagem Docker
+
+O `Dockerfile` usa Node.js 24 Alpine, instala apenas dependências de produção, executa com usuário sem privilégios e verifica `/api/health`. Construa a imagem na raiz com `docker build -t heroboxd .`. No host, configure as variáveis listadas acima; não inclua `.env`, arquivos do banco local ou credenciais na imagem.
 
 ### Antes de abrir o cadastro ao público
 
