@@ -9,7 +9,7 @@ function App(){
  React.useEffect(()=>{api('/api/auth/me').then(d=>setUser(d.user));if('serviceWorker'in navigator)navigator.serviceWorker.register('/sw.js').catch(()=>{})},[]);
  React.useEffect(()=>{const token=new URLSearchParams(location.search).get('reset');if(token){setResetToken(token);setDialog('reset')}},[]);
  React.useEffect(()=>{if(!dialog)return;function handleKeydown(event){if(event.key==='Escape')setDialog('')}document.addEventListener('keydown',handleKeydown);return()=>document.removeEventListener('keydown',handleKeydown)},[dialog]);
- React.useEffect(()=>{let live=true;api('/api/posters').then(images=>{if(live)setImageMap(images)}).catch(()=>{});return()=>{live=false}},[]);
+ React.useEffect(()=>{let live=true;api('/api/posters?version=2').then(images=>{if(live)setImageMap(images)}).catch(()=>{});return()=>{live=false}},[]);
  React.useEffect(()=>{if(user)api('/api/users/me/lists').then(setLists).catch(()=>{});else setLists([])},[user]);
  async function openDetails(item){setSelected(item);setDialog('detail');try{setReviews(await api(`/api/media/${item.id}/reviews`))}catch{setReviews([])}}
  async function signout(){await api('/api/auth/logout',{method:'POST'});setUser(null);setMessage('Sessão encerrada.')}

@@ -95,7 +95,7 @@ O `Dockerfile` usa Node.js 24 Alpine, instala apenas dependências de produção
 - A política inicial está em `frontend/public/privacidade.html`. Informe o contato do operador e confirme retenção, backups e processos reais antes de abrir o cadastro.
 - O usuário pode solicitar exclusão da conta; isso remove em cascata avaliações, listas e sessões. Backups antigos seguem o ciclo de retenção do operador.
 - A licença MIT cobre somente o código original. Verifique os direitos das imagens, marcas e personagens de terceiros antes de uso público.
-- As miniaturas do catálogo filtram para imagens marcadas como livres pela Wikimedia; isso não dispensa verificar licença e atribuição do arquivo individual antes de republicar.
+- As miniaturas do catálogo vêm das páginas da Wikimedia e podem incluir imagens com licenças diferentes, inclusive conteúdo não livre. Antes de publicar o site, confira a licença e a atribuição de cada imagem e substitua as que não puder usar.
 - `npm test` e `npm run check` rodam localmente e no GitHub Actions. O workflow não publica automaticamente o site.
 
 ## Enviar o código ao GitHub

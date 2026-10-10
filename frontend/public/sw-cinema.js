@@ -1,4 +1,4 @@
-const CACHE='heroboxd-static-v9';
+const CACHE='heroboxd-static-v10';
 const SHELL=['/','/manifest-red.json','/brand.svg','/theme.js','/src/styles.css','/src/cinema.css','/src/cinema-fixes.css','/src/account.css','/src/app.js','/vendor/react.production.min.js','/vendor/react-dom.production.min.js'];
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(SHELL)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key.startsWith('heroboxd-static-')&&key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim())));

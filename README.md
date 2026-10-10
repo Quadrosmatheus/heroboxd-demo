@@ -57,7 +57,7 @@ Para criar uma conta, peço nome, e-mail, idade e senha. Depois do cadastro, a p
 | Servidor e API | Node.js 24 LTS e Express 5 |
 | Banco de dados | MySQL 8.4 ou superior |
 | Sessões | Cookie `HttpOnly` e token de sessão armazenado como hash |
-| Imagens | Consulta à Wikimedia por miniaturas marcadas como livres |
+| Imagens | Miniaturas da Wikimedia, com indicação de origem e licença variável por imagem |
 | Automação | GitHub Actions para verificações de sintaxe e testes de segurança |
 
 ```mermaid
