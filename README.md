@@ -2,111 +2,140 @@
 
 <div align="center">
   <img src="frontend/public/brand.svg" width="64" alt="Símbolo do HeroBoxd">
-  <p><strong>HeroBoxd</strong></p>
-  <p>Um catálogo social para descobrir, avaliar e organizar histórias de super-heróis.</p>
-  <p><strong>React · Node.js · Express · MySQL</strong></p>
+  <p><strong>Minha estante de histórias de heróis</strong></p>
+  <p>Filmes, séries, jogos e HQs em um só lugar.</p>
 </div>
 
-HeroBoxd é um projeto de portfólio que reúne filmes, séries, jogos e quadrinhos em uma experiência de catálogo com contas, avaliações públicas e listas pessoais.
+## Sobre o projeto
 
-## O que você pode fazer
+Criei o HeroBoxd como um projeto de portfólio para explorar uma ideia que eu gosto: ter uma estante digital para descobrir histórias de super-heróis, registrar o que assisti ou li e compartilhar minhas opiniões. Ele reúne um catálogo demonstrativo com 80 títulos e permite pesquisar, filtrar, avaliar e organizar cada mídia.
 
-- Explorar 80 títulos, pesquisar e filtrar por formato e editora.
-- Abrir os detalhes de cada mídia, avaliar de 1 a 5 estrelas e escrever uma resenha.
-- Organizar uma estante pessoal com “Quero ver”, “Já vi/li” e “Favoritos”.
-- Alternar o tema visual e usar a interface responsiva em celular ou desktop.
-- Criar uma conta com nome, e-mail e idade. A sessão começa após o cadastro.
-- Solicitar a exclusão da conta, avaliações e listas associadas.
-- Recuperar o acesso com um link enviado ao e-mail cadastrado (após configurar o provedor).
+Também quis construir o fluxo completo de uma aplicação, além da interface: cadastro e login, persistência no MySQL, avaliações públicas e uma área pessoal para listas. Este README apresenta o que implementei e mostra algumas telas reais do site.
 
-## Como foi construído
+## Uma visita pelas telas
 
-| Camada | Implementação |
+### 1. Página inicial
+
+![Página inicial do HeroBoxd com destaque e navegação](docs/screenshots/01-inicio.png)
+
+Na abertura, apresento um título em destaque e levo a pessoa direto para o catálogo. A navegação também separa filmes, séries, jogos e HQs.
+
+### 2. Catálogo e filtros
+
+![Catálogo do HeroBoxd com filtros e cartões de mídias](docs/screenshots/02-catalogo.png)
+
+Organizei os títulos por formato. Dá para buscar pelo nome, filtrar por editora e escolher a ordem de exibição. Os cartões mostram o ano e a média das avaliações quando há opiniões publicadas.
+
+### 3. Detalhes e avaliações da comunidade
+
+![Detalhes de uma mídia e área de avaliações da comunidade](docs/screenshots/03-detalhe-e-avaliacoes.png)
+
+Ao abrir um título, a pessoa encontra a sinopse, o ano e a avaliação média. Abaixo fica o espaço das resenhas: visitantes podem ler o que já foi publicado, e usuários conectados podem deixar a própria nota e opinião.
+
+### 4. Cadastro
+
+![Formulário de cadastro com nome, e-mail, idade e senha](docs/screenshots/04-cadastro.png)
+
+Para criar uma conta, peço nome, e-mail, idade e senha. Depois do cadastro, a pessoa já entra no site e pode avaliar as mídias.
+
+## O que implementei
+
+- Catálogo demonstrativo de 80 filmes, séries, jogos e HQs, com busca e filtros.
+- Página de detalhes com sinopse, nota média e resenhas públicas.
+- Cadastro e login; a senha é armazenada com derivação `scrypt`.
+- Avaliações de uma a cinco estrelas e resenhas escritas.
+- Estante pessoal com listas “Quero ver”, “Já vi/li” e “Favoritos”.
+- Temas claro e escuro, layout responsivo e recursos básicos de PWA.
+- Recuperação de senha por e-mail com token de uso único, quando o Resend está configurado.
+- Exclusão de conta e dos dados associados.
+
+## Como organizei a aplicação
+
+| Parte | O que usei |
 | --- | --- |
-| Interface | React 18 servido diretamente pelo Express, CSS responsivo e PWA básica |
-| API | Node.js 24 LTS e Express 5 com rotas para catálogo, contas, avaliações e listas |
-| Persistência | MySQL 8 com consultas parametrizadas e chaves estrangeiras |
-| Autenticação | Senha derivada com `scrypt`; sessão aleatória armazenada como hash e cookie HttpOnly |
-| Recuperação de acesso | Token aleatório de uso único, armazenado como hash e enviado via Resend |
-| Catálogo | 80 registros editoriais sincronizados pelo comando `npm run seed` |
+| Interface | React 18, HTML e CSS responsivo |
+| Servidor e API | Node.js 24 LTS e Express 5 |
+| Banco de dados | MySQL 8.4 ou superior |
+| Sessões | Cookie `HttpOnly` e token de sessão armazenado como hash |
+| Imagens | Consulta à Wikimedia por miniaturas marcadas como livres |
+| Automação | GitHub Actions para verificações de sintaxe e testes de segurança |
 
 ```mermaid
 flowchart LR
-  Visitor[Visitante] --> UI[React no navegador]
+  Visitor[Pessoa visitante] --> UI[Interface React]
   UI --> API[API Express]
   API --> DB[(MySQL)]
-  API --> Images[API da Wikipédia para miniaturas]
-  UI --> Theme[localStorage para preferência de tema]
+  API --> Images[Wikimedia]
+  UI --> Theme[Preferência de tema no navegador]
 ```
 
-Veja os componentes, rotas e relações de dados em [docs/architecture.md](docs/architecture.md). As instruções de execução limpa e publicação estão em [docs/development-and-deployment.md](docs/development-and-deployment.md).
+Para conhecer as rotas e tabelas, consulte [docs/architecture.md](docs/architecture.md). Para detalhes de ambiente e publicação, consulte [docs/development-and-deployment.md](docs/development-and-deployment.md).
 
-## Executar localmente
+## Rodar no computador
 
-Requisitos: Node.js 24 LTS e MySQL 8.4+. Na raiz do repositório:
+Preparei o projeto para Node.js 24 LTS e MySQL 8.4+. Em um clone novo, na pasta do repositório, execute:
 
 ```powershell
 npm ci
 Copy-Item .env.example .env
 ```
 
-Configure o acesso ao MySQL no `.env`. Com o cliente MySQL disponível no terminal, crie as tabelas e preencha o catálogo:
+Depois, edite o `.env` com os dados do seu MySQL. Crie as tabelas e o banco com o esquema incluído:
 
 ```powershell
 mysql -u root -p
 ```
 
-No prompt do MySQL, importe o esquema:
+No prompt do MySQL, rode:
 
 ```sql
 source backend/schema.sql
 ```
 
-De volta ao terminal do projeto:
+Por fim, volte ao terminal do projeto e inicie a aplicação:
 
 ```powershell
 npm run seed
 npm start
 ```
 
-Abra `http://127.0.0.1:4175` (ou a porta definida por `PORT`). Para a configuração local do Windows já preparada neste computador, consulte [docs/development-and-deployment.md](docs/development-and-deployment.md#atalho-local-do-windows).
+Abra o endereço indicado no terminal (por padrão, `http://127.0.0.1:4175`). O atalho `start-local.ps1` é específico da instalação original e depende de arquivos locais que não são enviados ao GitHub; em um clone novo, siga os passos acima. Se precisar, deixei mais detalhes em [instruções de desenvolvimento e publicação](docs/development-and-deployment.md).
 
-## Dados e privacidade
+## Avaliações e dados
 
-As avaliações são públicas dentro do mesmo site e do mesmo banco de dados. O nome escolhido aparece nas resenhas; e-mail e idade não são retornados pela API pública. Na execução local, os dados ficam apenas no banco desta máquina. Para compartilhar opiniões entre dispositivos, publique a aplicação ligada a um MySQL remoto persistente e compartilhado.
+As opiniões aparecem para quem acessa a mesma instalação do site e o mesmo banco de dados. No modo local, elas ficam no MySQL deste computador; por isso, não são automaticamente compartilhadas com outros visitantes ou dispositivos. Para isso, é necessário publicar a aplicação e conectá-la a um banco MySQL remoto persistente.
 
-Leia a [política de privacidade](frontend/public/privacidade.html). Antes de receber usuários em produção, preencha nela os dados de contato de quem opera a instalação e confirme que os prazos descritos correspondem à hospedagem e aos backups utilizados.
+O nome escolhido aparece nas resenhas. A API pública não mostra e-mail nem idade. Também implementei exclusão de conta, que remove avaliações, listas e sessões ligadas à conta.
 
-## Estado do projeto
+## Configuração para produção
 
-- O servidor e o fluxo de cadastro, avaliação e leitura pública foram verificados localmente.
-- Não há bundler: o Express serve diretamente os arquivos React e CSS. `npm test` executa os testes automatizados e `npm run check` verifica a sintaxe; ambos também rodam no GitHub Actions.
-- Login e cadastro têm limite básico de tentativas em memória por processo. Em produção com múltiplas instâncias, configure limite compartilhado no proxy ou substitua-o por armazenamento compartilhado.
-- A recuperação de senha por e-mail está implementada; configure `RESEND_API_KEY`, um `MAIL_FROM` verificado e `PUBLIC_BASE_URL` para enviar mensagens.
-- Uma imagem Docker de produção está disponível para hosts de contêiner.
-- As miniaturas automáticas agora pedem imagens marcadas como livres pela Wikimedia. A licença pode variar por arquivo; verifique atribuição e termos antes de republicar imagens ou marcas.
+O código inclui suporte a publicação em um host Node.js ou em contêiner. Para compartilhar o site de verdade, ainda é preciso configurar a hospedagem, um MySQL persistente e as variáveis do ambiente no painel do provedor. Não coloque o arquivo `.env`, dados do banco ou credenciais no GitHub.
 
-## Estrutura do repositório
+Para enviar recuperação de senha por e-mail, configure `RESEND_API_KEY`, `MAIL_FROM` com remetente verificado e `PUBLIC_BASE_URL` com a URL HTTPS da aplicação. Sem essas credenciais, o fluxo de e-mail não envia mensagens. O arquivo [.env.example](.env.example) lista as variáveis necessárias.
 
-```text
-backend/
-  migrations/        migrações para bancos existentes
-  catalog.js         sincronização do catálogo de demonstração
-  reset-local-password.js
-  schema.sql         estrutura do banco para instalações novas
-  server.js          API e servidor de arquivos
-frontend/
-  public/            HTML, marca, manifesto e service worker
-  src/               interface React e estilos
-docs/                arquitetura e instruções de execução/publicação
+Antes de abrir o cadastro ao público, também é preciso preencher os dados de contato na [política de privacidade](frontend/public/privacidade.html), configurar backups e conferir os direitos e atribuições das imagens e marcas usadas. A licença MIT cobre o código original deste projeto, não os conteúdos de terceiros.
+
+## Verificações
+
+Rodo as verificações locais com:
+
+```powershell
+npm run check
+npm test
 ```
 
-## Recuperar uma conta local
+O mesmo fluxo é executado no GitHub Actions a cada alteração enviada ao repositório. O projeto inclui um `Dockerfile`, mas a imagem precisa ser construída no host ou em um ambiente com Docker disponível.
 
-Se o e-mail já estiver cadastrado, use **Entrar**. Caso a senha não seja aceita nesta instalação local, rode `npm run reset:local-password` no terminal da raiz. A ferramenta pede uma nova senha sem exibi-la e invalida sessões antigas. Ela recusa conexões MySQL remotas; recuperação em produção precisa ser feita por um fluxo verificado por e-mail.
+## Organização dos arquivos
 
-Para habilitar “Esqueci minha senha” em um site publicado, configure `RESEND_API_KEY`, `MAIL_FROM` com remetente validado e `PUBLIC_BASE_URL` com o endereço HTTPS público. Execute a migração `backend/migrations/002_add_password_reset_tokens.sql` nos bancos existentes. Os links expiram em uma hora e funcionam uma única vez; redefinir a senha encerra as sessões ativas.
+```text
+backend/               API, segurança, esquema e migrações do banco
+frontend/public/        Página inicial, ícones, manifesto e política de privacidade
+frontend/src/           Interface e estilos
+docs/screenshots/       Capturas de tela mostradas neste README
+docs/                   Arquitetura e instruções de desenvolvimento/publicação
+```
 
-## Licença
+## Licença e marcas
 
-O código original deste repositório está sob a licença MIT, em [LICENSE](LICENSE). Essa licença não cobre marcas, personagens, pôsteres ou outros materiais de terceiros incluídos ou referenciados. O projeto é independente e não possui afiliação oficial com Marvel, DC ou outros detentores de marcas e personagens.
+Disponibilizei o código original sob a licença MIT; consulte [LICENSE](LICENSE). Criei este projeto de forma independente, sem afiliação oficial com Marvel, DC ou outros detentores de marcas e personagens. A licença do código não concede direitos sobre marcas, personagens ou imagens de terceiros.
