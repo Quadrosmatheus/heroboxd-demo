@@ -8,7 +8,7 @@
 
 ## Sobre o projeto
 
-Criei o HeroBoxd como um projeto de portfólio para explorar uma ideia que eu gosto: ter uma estante digital para descobrir histórias de super-heróis, registrar o que assisti ou li e compartilhar minhas opiniões. Ele reúne um catálogo demonstrativo com 80 títulos e permite pesquisar, filtrar, avaliar e organizar cada mídia.
+Criei o HeroBoxd como um projeto para explorar uma ideia que eu gosto, ter uma estante digital para descobrir histórias de super-heróis, registrar o que assisti ou li e compartilhar minhas opiniões. Ele reúne um catálogo demonstrativo com 80 títulos e permite pesquisar, filtrar, avaliar e organizar cada mídia.
 
 Também quis construir o fluxo completo de uma aplicação, além da interface: cadastro e login, persistência no MySQL, avaliações públicas e uma área pessoal para listas. Este README apresenta o que implementei e mostra algumas telas reais do site.
 
