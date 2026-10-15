@@ -8,7 +8,7 @@ const { createRateLimiter } = require('./security');
 
 const app = express();
 const port = Number(process.env.PORT || 4175);
-const pool = mysql.createPool({host:process.env.DB_HOST||'127.0.0.1',port:Number(process.env.DB_PORT||3306),user:process.env.DB_USER||'root',password:process.env.DB_PASSWORD||'',database:process.env.DB_NAME||'heroboxd',waitForConnections:true,connectionLimit:10,charset:'utf8mb4'});
+const pool = mysql.createPool({host:process.env.DB_HOST||'127.0.0.1',port:Number(process.env.DB_PORT||3306),user:process.env.DB_USER||'root',password:process.env.DB_PASSWORD||'',database:process.env.DB_NAME||'heroboxd',waitForConnections:true,connectionLimit:10,charset:'utf8mb4',ssl:process.env.NODE_ENV==='production'?{}:undefined});
 const production = process.env.NODE_ENV === 'production';
 const sessionDays = Math.max(1, Math.min(90, Number(process.env.SESSION_DAYS||30)));
 const cookieName = 'heroboxd_session';
