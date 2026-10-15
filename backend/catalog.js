@@ -125,7 +125,7 @@ if (require.main === module) {
   const mysql = require('mysql2/promise');
   const dbName = process.env.DB_NAME || 'heroboxd';
   if (!/^[A-Za-z0-9_]+$/.test(dbName)) throw new Error('DB_NAME inválido.');
-  const pool = mysql.createPool({host:process.env.DB_HOST||'127.0.0.1',port:Number(process.env.DB_PORT||3306),user:process.env.DB_USER||'root',password:process.env.DB_PASSWORD||'',database:dbName,charset:'utf8mb4'});
+  const pool = mysql.createPool({host:process.env.DB_HOST||'127.0.0.1',port:Number(process.env.DB_PORT||3306),user:process.env.DB_USER||'root',password:process.env.DB_PASSWORD||'',database:dbName,charset:'utf8mb4',ssl:process.env.NODE_ENV==='production'?{}:undefined});
   syncCatalog(pool).catch(error => { console.error('Falha no catálogo:',error.code||error.name); process.exitCode=1; }).finally(() => pool.end());
 }
 
